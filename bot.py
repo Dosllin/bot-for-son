@@ -5,14 +5,14 @@ import pytz
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext, JobQueue
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext, JobQueue
 # Настройки
 load_dotenv()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 tz = pytz.timezone('Europe/Moscow')
-
+TOKEN = os.getenv("BOT_TOKEN")
 # --- КОНСТАНТЫ ---
 QUESTIONS = [
     {
@@ -321,10 +321,11 @@ def button_handler(update: Update, context: CallbackContext) -> None:
 
 
 def main() -> None:
-  application = Application.builder().token(os.getenv('BOT_TOKEN')).build()
-    
-    # Регистрируем обработчики
+  application = Application.builder().token(TOKEN).build()
   application.add_handler(CommandHandler("start", start))
+    
+    
+
     
     # Запускаем бота
   application.run_polling()
